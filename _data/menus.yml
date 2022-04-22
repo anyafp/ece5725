@@ -1,0 +1,15 @@
+main:
+  - name: "Home"
+    url: "/"
+    weight: 1
+  - name: "Team"
+    url: "/team/"
+    weight: 2
+
+footer:
+  - name: "afp65@cornell.edu"
+    url: "mailto:afp65@cornell.edu"
+    weight: 1
+  - name: "ccw94@cornell.edu"
+    url: "mailto:ccw94@cornell.edu"
+    weight: 2

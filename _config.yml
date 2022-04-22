@@ -1,0 +1,52 @@
+baseurl: '/ece5725/'
+permalink: pretty
+title: 'PiBarista'
+
+google_analytics_id: ""
+
+homepage:
+  show_call_box: true
+
+logo:
+  mobile: "images/logo/logo-mobile.svg"
+  desktop: "images/logo/logo.png"
+  desktop_height: "36px"
+
+footer:
+  copyright_text: 'Free Jekyll theme by <a class="zerostatic" href="https://www.zerostatic.io">www.zerostatic.io</a>'
+
+seo:
+  meta_og_title: "PiBarista Website"
+  meta_og_type: "website"
+  meta_og_url: "https://anyafp.github.io/ece5725/"
+  meta_og_image: "images/illustrations/robots.jpeg"
+  meta_og_description: ""
+  meta_twitter_card: "summary"
+  meta_twitter_site: "@zerostaticio"
+  meta_twitter_creator: "@zerostaticio"
+
+collections:
+  labs:
+    output: true
+  team:
+    output: true
+
+sass:
+  indentWidth: 4
+  style: compact # possible values: nested expanded compact compressed
+  precision: 10
+
+plugins:
+  - jekyll-environment-variables
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby/
+  - LICENSE.md
+  - LICENSE
+  - README.md
