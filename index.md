@@ -7,10 +7,14 @@ intro_image_absolute: false
 intro_image_hide_on_mobile: true
 ---
 
-# PiBarista
-
 ## Introduction & Motivation
+
+When you wake up, drink coffee, coffee hot.
 
 ## Setup
 
+Coffe machine
+
 ## Tasks
+
+Yes
