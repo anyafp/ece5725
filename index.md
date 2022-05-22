@@ -78,14 +78,15 @@ __Another Problem...__
 Now that we realized our mistake, we got another raspberry pi and configured the relay correctly. Yet, we ran into another problem that stumped us for quite a while. Ahead of time, we knew that the raspberry pi could not supply enough current out of its GPIO pins to energize the electromagnetic coils of the relay and so we used a transistor-diode with a current-limiting resistor configuration (as shown in the first figure below) that would typically support a sufficient current to perform the switching. However, to our surprise, even that set-up failed to do the job. We found out that with our latest set-up, the current-limiting resistor was not only inhibiting the current at the base of the transistor but also it inhibited the required current needed to flow across from the source to the drain to energize the electromagnetic coil. This limited current from the source to the drain is due to the fact that the current across the source and drain is essentially proportional to the current at base with a multiplicative factor also known as β or the gain of the transistor. To fix this, we had two options:
 
 1. Remove the current-limiting resistor at the base of the transistor and just feed the GPIO pin right in
-2. Implement a Darlington configuration (shown below) which would boost the gain to be the product of individual gains of both transistors (transforming the original gain from a relative magnitude of 102 to 103)
+2. Implement a Darlington configuration (shown below) which would boost the gain to be the product of individual gains of both transistors (transforming the original gain from a relative magnitude of 10^2 to 10^3)
 
 We decided to go with the Darlington set-up as it would allow us to insert a current-limiting resistor at the base and assure us of a high enough gain to enable stable and reliable switching of the relay at our will. With the above issues handled the relay was now up and running, enabling us to switch on and off the coffee maker.
 
+Transistor-Diode Configuration:
 <p align="left"><img src="images/ece5725/fig5.png" height="500" width="500"></p>
-Transistor-Diode Configuration
+
+Darlington Configuration:
 <p align="left"><img src="images/ece5725/fig6.png" height="500" width="500"></p>
-Darlington Configuration
 
 ### Understanding the Thermometer
 
