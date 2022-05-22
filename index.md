@@ -75,7 +75,7 @@ To implement the relay connections properly, pin 1 of the relay should’ve been
 
 __Another Problem...__
 
-Now that we realized our mistake, we got another raspberry pi and configured the relay correctly. Yet, we ran into another problem that stumped us for quite a while. Ahead of time, we knew that the raspberry pi could not supply enough current out of its GPIO pins to energize the electromagnetic coils of the relay and so we used a transistor-diode with a current-limiting resistor configuration (See Fig. X) that would typically support a sufficient current to perform the switching. However, to our surprise, even that set-up failed to do the job. We found out that with our latest set-up, the current-limiting resistor was not only inhibiting the current at the base of the transistor but also it inhibited the required current needed to flow across from the source to the drain to energize the electromagnetic coil. This limited current from the source to the drain is due to the fact that the current across the source and drain is essentially proportional to the current at base with a multiplicative factor also known as β or the gain of the transistor. To fix this, we had two options:
+Now that we realized our mistake, we got another raspberry pi and configured the relay correctly. Yet, we ran into another problem that stumped us for quite a while. Ahead of time, we knew that the raspberry pi could not supply enough current out of its GPIO pins to energize the electromagnetic coils of the relay and so we used a transistor-diode with a current-limiting resistor configuration (as shown in the first figure below) that would typically support a sufficient current to perform the switching. However, to our surprise, even that set-up failed to do the job. We found out that with our latest set-up, the current-limiting resistor was not only inhibiting the current at the base of the transistor but also it inhibited the required current needed to flow across from the source to the drain to energize the electromagnetic coil. This limited current from the source to the drain is due to the fact that the current across the source and drain is essentially proportional to the current at base with a multiplicative factor also known as β or the gain of the transistor. To fix this, we had two options:
 
 1. Remove the current-limiting resistor at the base of the transistor and just feed the GPIO pin right in
 2. Implement a Darlington configuration (shown below) which would boost the gain to be the product of individual gains of both transistors (transforming the original gain from a relative magnitude of 102 to 103)
@@ -83,7 +83,9 @@ Now that we realized our mistake, we got another raspberry pi and configured the
 We decided to go with the Darlington set-up as it would allow us to insert a current-limiting resistor at the base and assure us of a high enough gain to enable stable and reliable switching of the relay at our will. With the above issues handled the relay was now up and running, enabling us to switch on and off the coffee maker.
 
 <p align="left"><img src="images/ece5725/fig5.png" height="500" width="500"></p>
+Transistor-Diode Configuration
 <p align="left"><img src="images/ece5725/fig6.png" height="500" width="500"></p>
+Darlington Configuration
 
 ### Understanding the Thermometer
 
@@ -180,7 +182,7 @@ To conclude, this project really took us for a ride but in the end it was all wo
 
 * Anya took care of handling anything software related during the creation of Mr. Pi Coffee (i.e GUI) 
 * Chidera took care of system level design and anything associated with hardware (i.e hacking the Coffee Machine, Implementing thermometer, pump, and relay circuit)
-*Chidera and Anya both worked together to ensure that the software and hardware interacted correctly and safely
+* Chidera and Anya both worked together to ensure that the software and hardware interacted correctly and safely
 
 # References
 [1] OMRON Corporation, “G5LE, Cubic, Single-pole 10A Power Relay,” 
@@ -191,7 +193,6 @@ https://cdn-shop.adafruit.com/datasheets/DS18B20.pdf
 
 [3] Monk S (2013) Raspberry pi cookbook. O’Reilly Media, Inc
 
-<p></p>
-__Extra Note by Chidera: Sad but True Realization__
+### Extra Note by Chidera: Sad but True Realization
 
 As I’m writing this report I just realized that if I had plugged out the connections from pin4 and pin3 of the relay from the breadboard first and not the wall, I would have been directly exposed to 120V and I might not be here writing this final report. I just wanna thank God that I did not go out like that.
