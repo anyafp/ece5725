@@ -1,5 +1,5 @@
 ---
-title: PiBarista
+title: Mr. Pi Coffee
 layout: home
 description: Mr. Pi Coffee
 intro_image:
