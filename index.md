@@ -15,6 +15,8 @@ intro_image_hide_on_mobile: true
 
 We hacked a Mr. Coffee machine with a Raspberry Pi and made a latte.
 
+<p align="left"><img src="images/ece5725/group.png" height="550" width="550"></p>
+
 # Introduction & Motivation
 
 So Anya is an avid coffee drinker and for her birthday she received an [Ember Travel Mug](https://ember.com/products/ember-travel-mug-2){:target="_blank"} that was temperature controlled. The mug is pretty unique in the sense that it allows the user to set an exact drinking temperature for whatever fluid they store inside the mug. So this inspired us to think bigger and create our very own temperature regulated coffee maker with “latte” abilities. This project really pushed us outside of our comfort zone and forced us to use an ample amount of the electrical engineering and prototyping skills we had picked up over the course of our time here at Cornell. 
