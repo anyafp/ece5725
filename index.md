@@ -7,6 +7,12 @@ intro_image_absolute: true
 intro_image_hide_on_mobile: true
 ---
 
+<style type="text/css">
+  .gist {width:850px !important;}
+  .gist-file
+  .gist-data {max-height: 500px;max-width: 850px;}
+</style>
+
 We hacked a Mr. Coffee machine with a Raspberry Pi and made a latte.
 
 # Introduction & Motivation
@@ -85,8 +91,51 @@ As mentioned above, we used a DS18B20 waterproof thermometer, which allowed us t
 
 With the thermometer module and the relay now working individually, we could now integrate the two devices together to now create a temperature controlled coffee maker. In short, the thermometer could now signal to the relay when switch on and shut-off based on the temperature readings it’s getting. This current system would be enough to accomplish the original goals we set out to achieve at the beginning of this project.
 
-# Software aka GUI
-While we had this SNAFU going on, we didn’t want to be held back and continued working on our GUI that the user would be interacting with. 
+# Software (aka GUI)
+
+While we had this SNAFU going on with the hardware, we didn’t want to be held back and continued working on our GUI that the user would be interacting with. We programmed our entire GUI using pygame.
+
+<script src="https://gist.github.com/anyafp/3e2895706a49985596a0f4e8d69460cf.js"></script>
+
+## GUI Sections
+
+We decided that our GUI would consist of four main sections:
+
+1. Order Progress
+2. Order Here
+3. Temperature Log (real time)
+4. Quit Button
+
+<p align="left"><img src="images/ece5725/gui-bad.jpg" height="500" width="500"></p>
+
+### Order Progress
+
+This section begins to animate once the user has confirmed their order. We had timed the amount of time it takes to make 2, 3, 4, and 5 cups of coffee and programmed the animation to fill up the cup according to that amount of time by incrementing the height of the rect drawn and changing the position of the rect. If a latte is chosen, the animation will animate the cream colored rect to represent the milk and when the coffee is done, it will mix the colors together.
+
+### Order Here
+
+This section is the most elaborate part of the GUI as it includes 6 order pages:
+
+1. Type of coffee
+2. Amount (how many cups)
+3. Temperature
+4. Confirmation order
+5. Order in progress
+6. Order done
+
+Each choice would be saved in a variable and we would proceed to the next order page. There is a back button that would allow users to change their order before confirmation.
+
+### Temperature Log
+
+This temperature log takes in the temperature from the thermometer and plots it on the graph in real time.
+
+### Quit Button
+
+As always instructed and for good practice, we had a big red quit button (as well as a physical quit button!).
+
+## Interacting with the hardware
+
+The most important part of the GUI is that it sends the correct instructions to the hardware to fulfill the user's request.
 
 ## 1 Latte Coming Right Up!
 
