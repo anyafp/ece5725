@@ -18,7 +18,7 @@ View the demo video below to see the final product.
 <p align="left"><iframe width="720" height="408" src="https://youtube.com/embed/HrVmi3yRgPc"></iframe></p>
 <p></p>
 
-# Setup
+# Hardware
 
 ## Pre-existing System
 
@@ -59,29 +59,37 @@ Obviously the wiring of our first attempt was just absolutely wrong and dangerou
 
 __The Correct Way__
 
-To implement the relay connections properly, pin 1 of the relay should’ve been connected to the anode of the LED and since pin 1 is normally connected to pin 4, we should have connected pin 4 to 3v3. The GPIO and GND connection should’ve been across pins 2 & 5 so as to energize the electromagnetic coil to do the switching for us and lastly Pin 3 should’ve been left unconnected. In the same manner, with a coffee machine, the GPIO and GND pins should have been tied across pins 2 & 5 of the relay. Since we want a normally open configuration of the relay for safety (especially after what happened), pin 1 should have been connected to one part of the intercepted wire carrying 120V and pin 3 should have been connected to the other part of the 120V wire. So in the relay’s idle state, there would be no electrical connection made between the two 120V wires until the signal was given by the RPi
+To implement the relay connections properly, pin 1 of the relay should’ve been connected to the anode of the LED and since pin 1 is normally connected to pin 4, we should have connected pin 4 to 3v3. The GPIO and GND connection should’ve been across pins 2 & 5 so as to energize the electromagnetic coil to do the switching for us and lastly Pin 3 should’ve been left unconnected. In the same manner, with a coffee machine, the GPIO and GND pins should have been tied across pins 2 & 5 of the relay. Since we want a normally open configuration of the relay for safety (especially after what happened), pin 1 should have been connected to one part of the intercepted wire carrying 120V and pin 3 should have been connected to the other part of the 120V wire. So in the relay’s idle state, there would be no electrical connection made between the two 120V wires until the signal was given by the RPi.
+
+__Another Problem...__
 
 Now that we realized our mistake, we got another raspberry pi and configured the relay correctly. Yet, we ran into another problem that stumped us for quite a while. Ahead of time, we knew that the raspberry pi could not supply enough current out of its GPIO pins to energize the electromagnetic coils of the relay and so we used a transistor-diode with a current-limiting resistor configuration (See Fig. X) that would typically support a sufficient current to perform the switching. However, to our surprise, even that set-up failed to do the job. We found out that with our latest set-up, the current-limiting resistor was not only inhibiting the current at the base of the transistor but also it inhibited the required current needed to flow across from the source to the drain to energize the electromagnetic coil. This limited current from the source to the drain is due to the fact that the current across the source and drain is essentially proportional to the current at base with a multiplicative factor also known as β or the gain of the transistor. To fix this, we had two options:
 
-*1) Remove the current-limiting resistor at the base of the transistor and just feed the GPIO pin right in
-*2) Implement a Darlington configuration (Shown below fig for Darlington) which would boost the gain to be the product of individual gains of both transistors (transforming the original gain from a relative magnitude of 102 to 103)
+1. Remove the current-limiting resistor at the base of the transistor and just feed the GPIO pin right in
+2. Implement a Darlington configuration (shown below) which would boost the gain to be the product of individual gains of both transistors (transforming the original gain from a relative magnitude of 102 to 103)
 
 We decided to go with the Darlington set-up as it would allow us to insert a current-limiting resistor at the base and assure us of a high enough gain to enable stable and reliable switching of the relay at our will. With the above issues handled the relay was now up and running, enabling us to switch on and off the coffee maker.
 
 // Add fig X used above
 // Add fig. for Darlington
 
-#Understanding the Thermometer
-As mentioned above, we used a DS18B20 waterproof thermometer, which allowed us to read the temperature of the fluid that the thermometer was immersed in. This device communicates over a 1-wire interface which means that it only requires one data line and ground for communication with the Raspberry pi. Additionally, this also means that the thermometer can extract power directly from the data line which removes the requirement of an external power supply. Although the module appeared to have three lines (VDD, Data, & GND), if you examine the module PCB carefully, you will notice that VDD and Data are tied together via a 4.7KΩ resistor. Nonetheless, to interface with the thermometer, we enabled the 1-wire interface on the configuration settings on the Pi, modified the config.txt file in the boot directory of the Pi to include the GPIO pin that was being used on the data line for the 1-wire interface, and installed package called W1thermsensor to get the readings of the thermometer.
+### Understanding the Thermometer
+As mentioned above, we used a DS18B20 waterproof thermometer, which allowed us to read the temperature of the fluid that the thermometer was immersed in. This device communicates over a 1-wire interface which means that it only requires one data line and ground for communication with the Raspberry Pi. Additionally, this also means that the thermometer can extract power directly from the data line which removes the requirement of an external power supply. Although the module appeared to have three lines (VDD, Data, & GND), if you examine the module PCB carefully, you will notice that VDD and Data are tied together via a 4.7kΩ resistor. Nonetheless, to interface with the thermometer, we enabled the 1-wire interface on the configuration settings on the Pi, modified the ```config.txt``` file in the boot directory of the Pi to include the GPIO pin that was being used on the data line for the 1-wire interface, and installed package called W1thermsensor to get the readings of the thermometer.
+
+<p align="left"><iframe width="720" height="408" src="https://youtube.com/embed/CznCtDgQvBc"></iframe></p>
+<p></p>
 
 // Insert Thermometer Module Picture
-##MVP (Minimum Viable Product)
+
+## MVP (Minimum Viable Product)
+
 With the thermometer module and the relay now working individually, we could now integrate the two devices together to now create a temperature controlled coffee maker. In short, the thermometer could now signal to the relay when switch on and shut-off based on the temperature readings it’s getting. This current system would be enough to accomplish the original goals we set out to achieve at the beginning of this project.
 
 # Software aka GUI
 While we had this SNAFU going on, we didn’t want to be held back and continued working on our GUI that the user would be interacting with. 
 
-## 1 Latte Coming Right Up !
+## 1 Latte Coming Right Up!
+
 Since the MVP was finished and we had a bit more time on our hands, we decided to add a Latte feature to our coffee maker. For those of you who don’t know (a.k.a Chidera), this would essentially be coffee with milk. To automate the pouring of Milk into our coffee, we quickly assembled a makeshift turbine-type electric pump with a bottle cap, a lid, two tubes, 3 small acrylic rectangle cut-outs, and a DC motor. The way the system works is that the lid (which covers the bottle cap and has a drilled hole in the center) is connected to a fluid source (e.g a bottle of water) via a plastic tubing, then as the fluid flows from the source to the lid opening within the tubing, the fluid enters the bottle cap. Within the bottle cap lies two holes: one on the side of the bottle cap and one on the base. The hole on the base serves as the insertion point for the DC motor and the hole on the side supports another plastic tubing through which the incoming fluid (at the lid-bottle cap interface ) is pumped out to and the plastic tubing route guides the pumped fluid to its destination. The three small acrylic rectangles are connected to the motor equidistantly, and form the turbine formation that aids in pumping the fluid out. In a similar manner as with the relay, the leads of the pump were connected in parallel with the diode and connected between 5V and the source of the transistor. The diode is used to protect against any stray return currents from inductive motor load to the pi and the transistor yields the necessary current for the motors to function. In this situation a motor driver is not needed because we don’t really care about the direction the motor is spinning in this setup. So with all hardware in place, as the motor spins the ‘turbine,’ the fluid is carried out by the turbines from the source and into the destination. Nonetheless, once this electric pump was finished, we integrated it into our existing MVP and introduced Latte capabilities into our hacked temperature - controlled coffee maker
 
 // Add a picture of the Electric Pump here 
