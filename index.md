@@ -50,6 +50,8 @@ Upon understanding the pre-existing connections, we found the perfect spot to in
 
 ### Understanding the Relay
 
+<p align="left"><img src="images/ece5725/relay.png" height="550" width="550"></p>
+
 Given that the relay was practically the crux of the hardware system of the redesigned coffee machine, we first tested the relay to understand how it worked. As the name indicates, this is a SPDT architecture, which means that the middle terminal can make different electrical connections upon switching. Shown below is the physical structure of the relay and its corresponding circuitry. During the first attempt of getting the relay working we used LED lights (a low current load) to test it out. 
 
 <p align="left"><iframe width="720" height="408" src="https://youtube.com/embed/fjFVEP5lZts"></iframe></p>
@@ -61,7 +63,9 @@ In the initial attempt we assumed (just based off physical observation and not t
 
 __What Just Happened?__
 
-Obviously the wiring of our first attempt was just absolutely wrong and dangerous. Although our initial configuration seemingly “worked” the first time around, the reason why it appeared correct was that pin 1 and pin 4 were normally connected. This means that in the relay’s idle state pin 1 is always connected to pin 4 unless the electromagnetic coil is energized enough to toggle the connection from pin 1 to pin 4. Thus when we connected a GPIO pin to pin4 of the relay and toggle the pin HIGH and low we were directly feeding 3v3 to the anode of the LED instead of properly using the relay coil to switch the anode from unconnected to 3v3. When transferred over to the coffee maker, we essentially connected a 120V right to a GPIO pin of the RPi via the breadboard–which caused the sparks– and destroyed the Raspberry Pi machine.
+Obviously the wiring of our first attempt was just absolutely wrong and dangerous. Although our initial configuration seemingly “worked” the first time around, the reason why it appeared correct was that pin 1 and pin 4 were normally connected. This means that in the relay’s idle state pin 1 is always connected to pin 4 unless the electromagnetic coil is energized enough to toggle the connection from pin 1 to pin 4. Thus when we connected a GPIO pin to pin4 of the relay and toggle the pin HIGH and low we were directly feeding 3v3 to the anode of the LED instead of properly using the relay coil to switch the anode from unconnected to 3v3. When transferred over to the coffee maker, we essentially connected a 120V right to a GPIO pin of the RPi via the breadboard–which caused the sparks– and destroyed the Raspberry Pi machine. The incorrect circuitry is illustrated below:
+
+<p align="left"><img src="images/ece5725/wrong.png" height="550" width="550"></p>
 
 __The Correct Way__
 
@@ -76,16 +80,17 @@ Now that we realized our mistake, we got another raspberry pi and configured the
 
 We decided to go with the Darlington set-up as it would allow us to insert a current-limiting resistor at the base and assure us of a high enough gain to enable stable and reliable switching of the relay at our will. With the above issues handled the relay was now up and running, enabling us to switch on and off the coffee maker.
 
-// Add fig X used above
-// Add fig. for Darlington
+<p align="left"><img src="images/ece5725/fig5.png" height="500" width="500"></p>
+<p align="left"><img src="images/ece5725/fig6.png" height="500" width="500"></p>
 
 ### Understanding the Thermometer
-As mentioned above, we used a DS18B20 waterproof thermometer, which allowed us to read the temperature of the fluid that the thermometer was immersed in. This device communicates over a 1-wire interface which means that it only requires one data line and ground for communication with the Raspberry Pi. Additionally, this also means that the thermometer can extract power directly from the data line which removes the requirement of an external power supply. Although the module appeared to have three lines (VDD, Data, & GND), if you examine the module PCB carefully, you will notice that VDD and Data are tied together via a 4.7kΩ resistor. Nonetheless, to interface with the thermometer, we enabled the 1-wire interface on the configuration settings on the Pi, modified the ```config.txt``` file in the boot directory of the Pi to include the GPIO pin that was being used on the data line for the 1-wire interface, and installed package called W1thermsensor to get the readings of the thermometer.
+
+<p align="left"><img src="images/ece5725/temp.png" height="500" width="500"></p>
+
+As mentioned above, we used a DS18B20 waterproof thermometer, which allowed us to read the temperature of the fluid that the thermometer was immersed in. This device communicates over a 1-wire interface which means that it only requires one data line and ground for communication with the Raspberry Pi. Additionally, this also means that the thermometer can extract power directly from the data line which removes the requirement of an external power supply. Although the module appeared to have three lines (VDD, Data, & GND), if you examine the module PCB carefully, you will notice that VDD and Data are tied together via a 4.7kΩ resistor. Nonetheless, to interface with the thermometer, we enabled the 1-wire interface on the configuration settings on the Pi, modified the ```config.txt``` file in the boot directory of the Pi to include the GPIO pin that was being used on the data line for the 1-wire interface, and installed package called W1thermsensor to get the readings of the thermometer. In the figure aboce, the physical thermometer and the corresponding circuitry are featured.
 
 <p align="left"><iframe width="720" height="408" src="https://youtube.com/embed/CznCtDgQvBc"></iframe></p>
 <p></p>
-
-// Insert Thermometer Module Picture
 
 ## MVP (Minimum Viable Product)
 
@@ -95,7 +100,9 @@ With the thermometer module and the relay now working individually, we could now
 
 Since the MVP was finished and we had a bit more time on our hands, we decided to add a Latte feature to our coffee maker. For those of you who don’t know (a.k.a Chidera), this would essentially be coffee with milk. To automate the pouring of Milk into our coffee, we quickly assembled a makeshift turbine-type electric pump with a bottle cap, a lid, two tubes, 3 small acrylic rectangle cut-outs, and a DC motor. The way the system works is that the lid (which covers the bottle cap and has a drilled hole in the center) is connected to a fluid source (e.g a bottle of water) via a plastic tubing, then as the fluid flows from the source to the lid opening within the tubing, the fluid enters the bottle cap. Within the bottle cap lies two holes: one on the side of the bottle cap and one on the base. The hole on the base serves as the insertion point for the DC motor and the hole on the side supports another plastic tubing through which the incoming fluid (at the lid-bottle cap interface ) is pumped out to and the plastic tubing route guides the pumped fluid to its destination. The three small acrylic rectangles are connected to the motor equidistantly, and form the turbine formation that aids in pumping the fluid out. In a similar manner as with the relay, the leads of the pump were connected in parallel with the diode and connected between 5V and the source of the transistor. The diode is used to protect against any stray return currents from inductive motor load to the pi and the transistor yields the necessary current for the motors to function. In this situation a motor driver is not needed because we don’t really care about the direction the motor is spinning in this setup. So with all hardware in place, as the motor spins the ‘turbine,’ the fluid is carried out by the turbines from the source and into the destination. Nonetheless, once this electric pump was finished, we integrated it into our existing MVP and introduced Latte capabilities into our hacked temperature - controlled coffee maker
 
-// Add a picture of the Electric Pump here 
+## Final Circuit
+
+<p align="left"><img src="images/ece5725/final.png" height="650" width="650"></p>
 
 # Software (aka GUI)
 
@@ -143,7 +150,46 @@ As always instructed and for good practice, we had a big red quit button (as wel
 
 The most important part of the GUI is that it sends the correct instructions to the hardware to fulfill the user's request. When the confirmation button is pressed, the GPIO pin that is connected to the transistors (that are connected to the relay) is set high so that the heater in the coffee machine turns on. Based on the input for the number of cups, the heater is turned on for a certain amount of time to brew the coffee. When the timer is up, if the user had ordered a latte, the GPIO pin hooked up to the milk pump would be set high so as to pump the milk for a set amount of time.
 
+# Results
 
+We met our project goal as we were able to implement a Raspberry Pi temperature controlled coffee maker with a latte feature. Additionally, we were able to demonstrate in real time during the demo session all the capabilities of the redesigned system.
+
+# Future Improvements
+
+If we had more time, we would have liked to make this system fully autonomous by introducing a couple more features. One extra feature would be to make an automated water pump used for filling the reservoir with the user’s desired cup amount. Another would be to add stirring a magnetic stirrer to the coffee pot, and lastly, perhaps implementing a mechanical apparatus for filling up the coffee machine with coffee grounds would be very helpful as well. Furthermore, we could expand the variety of drinks offered to different types of tea as well and we could also improve our PID control algorithm for regulating the temperature.
+
+# Conclusion
+
+To conclude, this project really took us for a ride but in the end it was all worth it. It was our first time working with high power electronics, relays, high current switching devices (i.e darlington), and creating an electric pump. Despite all of the aforementioned being unknown territory to us at the beginning of the project, we were able to overcome our roadblocks and safely deliver a working prototype. On that note, we’d like to thank Prof. Skovira for all his guidance during this project and the advice that he imparted on to us during our struggle in debugging the hardware. We would also like to take this opportunity to reiterate this oversaid and very important statement: ALWAYS READ THE DATASHEET AND DON’T ASSUME ANYTHING IN ELECTRONICS!
+
+# Bill of Materials
+
+| Item | Cost |
+| ------ | -------|
+| Mr. Coffee Machine | $18 |
+| DS18B20 Thermometer Module | $9.95 |
+| DC 5V Motor | $1.95 |
+| 3 NPN Transistors | $0.58 |
+| Relay | $2.10 |
+| -------- | ------- |
+| Total Cost | $32.58 |
+
+# Contributions
+
+* Anya took care of handling anything software related during the creation of Mr. Pi Coffee (i.e GUI) 
+* Chidera took care of system level design and anything associated with hardware (i.e hacking the Coffee Machine, Implementing thermometer, pump, and relay circuit)
+*Chidera and Anya both worked together to ensure that the software and hardware interacted correctly and safely
+
+# References
+[1] OMRON Corporation, “G5LE, Cubic, Single-pole 10A Power Relay,” 
+https://cdn.sparkfun.com/assets/b/f/0/7/8/DS-16888-Omron_Relay_G5LE-1_DC3.pdf
+
+[2] Maxim Integrated, “DS18B20 Programmable Resolution 1-Wire Digital Thermometer”, 2008.
+https://cdn-shop.adafruit.com/datasheets/DS18B20.pdf
+
+[3] Monk S (2013) Raspberry pi cookbook. O’Reilly Media, Inc
+
+<p></p>
 __Extra Note by Chidera: Sad but True Realization__
 
 As I’m writing this report I just realized that if I had plugged out the connections from pin4 and pin3 of the relay from the breadboard first and not the wall, I would have been directly exposed to 120V and I might not be here writing this final report. I just wanna thank God that I did not go out like that.
