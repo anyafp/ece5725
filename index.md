@@ -91,6 +91,12 @@ As mentioned above, we used a DS18B20 waterproof thermometer, which allowed us t
 
 With the thermometer module and the relay now working individually, we could now integrate the two devices together to now create a temperature controlled coffee maker. In short, the thermometer could now signal to the relay when switch on and shut-off based on the temperature readings it’s getting. This current system would be enough to accomplish the original goals we set out to achieve at the beginning of this project.
 
+## Milk Pump
+
+Since the MVP was finished and we had a bit more time on our hands, we decided to add a Latte feature to our coffee maker. For those of you who don’t know (a.k.a Chidera), this would essentially be coffee with milk. To automate the pouring of Milk into our coffee, we quickly assembled a makeshift turbine-type electric pump with a bottle cap, a lid, two tubes, 3 small acrylic rectangle cut-outs, and a DC motor. The way the system works is that the lid (which covers the bottle cap and has a drilled hole in the center) is connected to a fluid source (e.g a bottle of water) via a plastic tubing, then as the fluid flows from the source to the lid opening within the tubing, the fluid enters the bottle cap. Within the bottle cap lies two holes: one on the side of the bottle cap and one on the base. The hole on the base serves as the insertion point for the DC motor and the hole on the side supports another plastic tubing through which the incoming fluid (at the lid-bottle cap interface ) is pumped out to and the plastic tubing route guides the pumped fluid to its destination. The three small acrylic rectangles are connected to the motor equidistantly, and form the turbine formation that aids in pumping the fluid out. In a similar manner as with the relay, the leads of the pump were connected in parallel with the diode and connected between 5V and the source of the transistor. The diode is used to protect against any stray return currents from inductive motor load to the pi and the transistor yields the necessary current for the motors to function. In this situation a motor driver is not needed because we don’t really care about the direction the motor is spinning in this setup. So with all hardware in place, as the motor spins the ‘turbine,’ the fluid is carried out by the turbines from the source and into the destination. Nonetheless, once this electric pump was finished, we integrated it into our existing MVP and introduced Latte capabilities into our hacked temperature - controlled coffee maker
+
+// Add a picture of the Electric Pump here 
+
 # Software (aka GUI)
 
 While we had this SNAFU going on with the hardware, we didn’t want to be held back and continued working on our GUI that the user would be interacting with. We programmed our entire GUI using pygame.
@@ -135,15 +141,9 @@ As always instructed and for good practice, we had a big red quit button (as wel
 
 ## Interacting with the hardware
 
-The most important part of the GUI is that it sends the correct instructions to the hardware to fulfill the user's request.
-
-## 1 Latte Coming Right Up!
-
-Since the MVP was finished and we had a bit more time on our hands, we decided to add a Latte feature to our coffee maker. For those of you who don’t know (a.k.a Chidera), this would essentially be coffee with milk. To automate the pouring of Milk into our coffee, we quickly assembled a makeshift turbine-type electric pump with a bottle cap, a lid, two tubes, 3 small acrylic rectangle cut-outs, and a DC motor. The way the system works is that the lid (which covers the bottle cap and has a drilled hole in the center) is connected to a fluid source (e.g a bottle of water) via a plastic tubing, then as the fluid flows from the source to the lid opening within the tubing, the fluid enters the bottle cap. Within the bottle cap lies two holes: one on the side of the bottle cap and one on the base. The hole on the base serves as the insertion point for the DC motor and the hole on the side supports another plastic tubing through which the incoming fluid (at the lid-bottle cap interface ) is pumped out to and the plastic tubing route guides the pumped fluid to its destination. The three small acrylic rectangles are connected to the motor equidistantly, and form the turbine formation that aids in pumping the fluid out. In a similar manner as with the relay, the leads of the pump were connected in parallel with the diode and connected between 5V and the source of the transistor. The diode is used to protect against any stray return currents from inductive motor load to the pi and the transistor yields the necessary current for the motors to function. In this situation a motor driver is not needed because we don’t really care about the direction the motor is spinning in this setup. So with all hardware in place, as the motor spins the ‘turbine,’ the fluid is carried out by the turbines from the source and into the destination. Nonetheless, once this electric pump was finished, we integrated it into our existing MVP and introduced Latte capabilities into our hacked temperature - controlled coffee maker
-
-// Add a picture of the Electric Pump here 
+The most important part of the GUI is that it sends the correct instructions to the hardware to fulfill the user's request. When the confirmation button is pressed, the GPIO pin that is connected to the transistors (that are connected to the relay) is set high so that the heater in the coffee machine turns on. Based on the input for the number of cups, the heater is turned on for a certain amount of time to brew the coffee. When the timer is up, if the user had ordered a latte, the GPIO pin hooked up to the milk pump would be set high so as to pump the milk for a set amount of time.
 
 
-#
-#Sad but True Realization by Chidera
-As I’m writing this paper I just realized that if I had plugged out the connections from pin4 and pin3 of the relay from the breadboard first and not the wall, I would have been directly exposed to 120V and I might not be here writing this final report. I just wanna thank God that I did not go out like that.
+__Extra Note by Chidera: Sad but True Realization__
+
+As I’m writing this report I just realized that if I had plugged out the connections from pin4 and pin3 of the relay from the breadboard first and not the wall, I would have been directly exposed to 120V and I might not be here writing this final report. I just wanna thank God that I did not go out like that.
